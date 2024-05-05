@@ -3,6 +3,7 @@ from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+import streamlit as st
 import os
 import warnings
 
@@ -58,7 +59,26 @@ def RAGwithPhi3(query):
     response = llm.invoke(template)
     print("\n")
     print(response.content.split("<|end|>")[0].strip())
+    return response.content.split("<|end|>")[0].strip()
 
-while True:
-    query = input("Enter your query: ")
-    RAGwithPhi3(query)
+#Streamlit Frontend
+def main():
+    st.title("RAG with MS Phi3")
+    chat_history = []
+    query_placeholder = st.empty()
+    query = query_placeholder.text_input("Enter your query:")
+    if st.button("Submit"):
+        response = RAGwithPhi3(query)
+        chat_history.append((query, response))
+        for q, a in chat_history:
+            st.markdown(f'**Question:** {q}')
+            st.markdown(f'**Answer:** {a}')
+        query_placeholder.text_input("Enter your query:", value='', key='1')
+
+# Allows running the application on the terminal
+# while True:
+#     query = input("Enter your query: ")
+#     RAGwithPhi3(query)
+
+if __name__ == "__main__":
+    main()
