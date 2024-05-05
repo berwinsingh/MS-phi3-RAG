@@ -9,6 +9,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
+#Allows creating embeddings and storing them into a vectordb
 def createEmbeddings():
     embeddings = OllamaEmbeddings(model="phi3")
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
@@ -34,7 +35,8 @@ def createEmbeddings():
     
     # print(db)
     return db
-    
+
+#Conversing with the LLM based on the context that has been given    
 def RAGwithPhi3(query):
     llm = ChatOllama(model="phi3")
     db = createEmbeddings()
