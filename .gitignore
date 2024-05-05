@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 /faiss.index
+/Embeddings Data
 
 # C extensions
 *.so

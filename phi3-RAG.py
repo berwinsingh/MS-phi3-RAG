@@ -1,6 +1,5 @@
 from langchain_community.chat_models import ChatOllama
 from langchain_community.embeddings import OllamaEmbeddings
-# from langchain.prompts import PromptTemplate
 from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -13,11 +12,11 @@ def createEmbeddings():
     embeddings = OllamaEmbeddings(model="phi3")
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
     all_data = []
-    chorma_db = "./faiss.index"
+    index_file = "./faiss.index"
 
     files ="./Embeddings Data"
 
-    if not os.path.exists(chorma_db):
+    if not os.path.exists(index_file):
         for file in os.listdir(files):
             file_path = os.path.join(files, file)
             if os.path.isfile(file_path):
@@ -28,9 +27,9 @@ def createEmbeddings():
                 all_data.extend(data)
 
         db = FAISS.from_documents(all_data, embeddings)
-        db.save_local(chorma_db)
+        db.save_local(index_file)
     else:
-        db = FAISS.load_local(chorma_db, embeddings, allow_dangerous_deserialization=True)
+        db = FAISS.load_local(index_file, embeddings, allow_dangerous_deserialization=True)
     
     # print(db)
     return db
@@ -47,7 +46,8 @@ def RAGwithPhi3(query):
 
     template = f"""
     You are a helpful AI assistant that can help me with my queries based on the context that has been provided. If the answer isn't clear, please let me know.
-
+    If the answer isn't relevant to the context just say "I don't know".
+    
     Context: {context_text}
     
     Question: {query}
@@ -59,4 +59,6 @@ def RAGwithPhi3(query):
     print("\n")
     print(response.content.split("<|end|>")[0].strip())
 
-RAGwithPhi3("What is Prompt Engineering?")
+while True:
+    query = input("Enter your query: ")
+    RAGwithPhi3(query)
