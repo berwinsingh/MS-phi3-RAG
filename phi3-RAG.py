@@ -1,10 +1,9 @@
 from langchain_community.chat_models import ChatOllama
 from langchain_community.embeddings import OllamaEmbeddings
-from langchain.prompts import PromptTemplate
-from langchain_community.vectorstores import Chroma, FAISS
+# from langchain.prompts import PromptTemplate
+from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain.chains import RetrievalQA
 import os
 import warnings
 
